@@ -1,0 +1,7 @@
+neuralprocesses.data.data module
+================================
+
+.. automodule:: neuralprocesses.data.data
+   :members:
+   :undoc-members:
+   :show-inheritance:

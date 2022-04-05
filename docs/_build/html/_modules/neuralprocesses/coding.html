@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neuralprocesses.coding &mdash; neuralprocesses 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> neuralprocesses
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Neural Processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Application Programming Interface</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">neuralprocesses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>neuralprocesses.coding</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for neuralprocesses.coding</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">lab</span> <span class="k">as</span> <span class="nn">B</span>
+<span class="kn">import</span> <span class="nn">matrix</span>  <span class="c1"># noqa</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_dispatch</span>
+<span class="kn">from</span> <span class="nn">.parallel</span> <span class="kn">import</span> <span class="n">Parallel</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">register_module</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">,</span> <span class="s2">&quot;Materialise&quot;</span><span class="p">]</span>
+
+
+<span class="nd">@_dispatch</span>
+<span class="k">def</span> <span class="nf">code</span><span class="p">(</span><span class="n">coder</span><span class="p">,</span> <span class="n">xz</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Perform a coding operation.</span>
+
+<span class="sd">    The default behaviour is to apply `coder` to `z` and return `(xz, coder(z))`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        coder (coder): Coder.</span>
+<span class="sd">        xz (input): Current inputs corresponding to current encoding.</span>
+<span class="sd">        z (tensor): Current encoding.</span>
+<span class="sd">        x (input): Desired inputs.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple[input, tensor]: New encoding.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">xz</span><span class="p">,</span> <span class="n">coder</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+
+
+<span class="nd">@_dispatch</span>
+<span class="k">def</span> <span class="nf">_merge</span><span class="p">(</span><span class="n">z</span><span class="p">:</span> <span class="n">B</span><span class="o">.</span><span class="n">Numeric</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">z</span>
+
+
+<span class="nd">@_dispatch</span>
+<span class="k">def</span> <span class="nf">_merge</span><span class="p">(</span><span class="n">zs</span><span class="p">:</span> <span class="n">Parallel</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">_merge</span><span class="p">(</span><span class="o">*</span><span class="n">zs</span><span class="p">)</span>
+
+
+<span class="nd">@_dispatch</span>
+<span class="k">def</span> <span class="nf">_merge</span><span class="p">(</span><span class="n">z0</span><span class="p">:</span> <span class="n">B</span><span class="o">.</span><span class="n">Numeric</span><span class="p">,</span> <span class="o">*</span><span class="n">zs</span><span class="p">:</span> <span class="n">B</span><span class="o">.</span><span class="n">Numeric</span><span class="p">):</span>
+    <span class="n">zs</span> <span class="o">=</span> <span class="p">(</span><span class="n">z0</span><span class="p">,)</span> <span class="o">+</span> <span class="n">zs</span>
+    <span class="c1"># Remove all `None`s: those correspond to global features.</span>
+    <span class="n">zs</span> <span class="o">=</span> <span class="p">[</span><span class="n">z</span> <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">zs</span> <span class="k">if</span> <span class="n">z</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">zs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No inputs specified.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">zs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">diffs</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">B</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">zs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">z</span><span class="p">))</span> <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">zs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]])</span>
+        <span class="k">if</span> <span class="n">B</span><span class="o">.</span><span class="n">jit_to_numpy</span><span class="p">(</span><span class="n">diffs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">B</span><span class="o">.</span><span class="n">epsilon</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Cannot merge inputs.&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">zs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="nd">@_dispatch</span>
+<span class="k">def</span> <span class="nf">_merge</span><span class="p">(</span><span class="n">z0</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="o">*</span><span class="n">zs</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+    <span class="n">zs</span> <span class="o">=</span> <span class="p">(</span><span class="n">z0</span><span class="p">,)</span> <span class="o">+</span> <span class="n">zs</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_merge</span><span class="p">(</span><span class="o">*</span><span class="n">zis</span><span class="p">)</span> <span class="k">for</span> <span class="n">zis</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">zs</span><span class="p">))</span>
+
+
+<span class="nd">@_dispatch</span>
+<span class="k">def</span> <span class="nf">_repeat_concat</span><span class="p">(</span><span class="n">z</span><span class="p">:</span> <span class="n">B</span><span class="o">.</span><span class="n">Numeric</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">z</span>
+
+
+<span class="nd">@_dispatch</span>
+<span class="k">def</span> <span class="nf">_repeat_concat</span><span class="p">(</span><span class="n">zs</span><span class="p">:</span> <span class="n">Parallel</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">_repeat_concat</span><span class="p">(</span><span class="o">*</span><span class="n">zs</span><span class="p">)</span>
+
+
+<span class="nd">@_dispatch</span>
+<span class="k">def</span> <span class="nf">_repeat_concat</span><span class="p">(</span><span class="n">z0</span><span class="p">:</span> <span class="n">B</span><span class="o">.</span><span class="n">Numeric</span><span class="p">,</span> <span class="o">*</span><span class="n">zs</span><span class="p">:</span> <span class="n">B</span><span class="o">.</span><span class="n">Numeric</span><span class="p">):</span>
+    <span class="c1"># Broadcast the data dimensions before concatenating.</span>
+    <span class="n">zs</span> <span class="o">=</span> <span class="p">(</span><span class="n">z0</span><span class="p">,)</span> <span class="o">+</span> <span class="n">zs</span>
+    <span class="c1"># Broadcast the data dimensions.</span>
+    <span class="n">shapes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">z</span><span class="p">))</span> <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">zs</span><span class="p">]</span>
+    <span class="n">shape_n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="n">shapes</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="n">shapes</span><span class="p">:</span>
+        <span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">shape_n</span>
+    <span class="n">zs</span> <span class="o">=</span> <span class="p">[</span><span class="n">B</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="o">*</span><span class="n">shape</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">zs</span><span class="p">,</span> <span class="n">shapes</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="o">*</span><span class="n">zs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Materialise"><a class="viewcode-back" href="../../source/neuralprocesses.coding.html#neuralprocesses.coding.Materialise">[docs]</a><span class="nd">@register_module</span>
+<span class="k">class</span> <span class="nc">Materialise</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Materialise an aggregate encoding.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        agg_x (function, optional): Aggregation of the inputs. Defaults to merging the</span>
+<span class="sd">            inputs.</span>
+<span class="sd">        agg_y (function, optional): Aggregation of the outputs. Defaults to</span>
+<span class="sd">            concatenating the outputs.</span>
+<span class="sd">        broadcast_y (bool, optional): Broadcast the data dimensions of the outputs</span>
+<span class="sd">            before performing `agg_y`. Defaults to `True`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        agg_x (function): Aggregation of the inputs.</span>
+<span class="sd">        agg_y (function): Aggregation of the outputs.</span>
+<span class="sd">        broadcast_y (bool): Broadcast the data dimensions of the outputs before</span>
+<span class="sd">            performing `agg_y`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agg_x</span><span class="o">=</span><span class="n">_merge</span><span class="p">,</span> <span class="n">agg_y</span><span class="o">=</span><span class="n">_repeat_concat</span><span class="p">,</span> <span class="n">broadcast_y</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agg_x</span> <span class="o">=</span> <span class="n">agg_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agg_y</span> <span class="o">=</span> <span class="n">agg_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">broadcast_y</span> <span class="o">=</span> <span class="n">broadcast_y</span></div>
+
+
+<span class="nd">@_dispatch</span>
+<span class="k">def</span> <span class="nf">code</span><span class="p">(</span><span class="n">coder</span><span class="p">:</span> <span class="n">Materialise</span><span class="p">,</span> <span class="n">xz</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="n">kw_args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">coder</span><span class="o">.</span><span class="n">agg_x</span><span class="p">(</span><span class="n">xz</span><span class="p">),</span> <span class="n">coder</span><span class="o">.</span><span class="n">agg_y</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Wessel Bruinsma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

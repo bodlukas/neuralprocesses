@@ -1,0 +1,7 @@
+neuralprocesses.torch.nn module
+===============================
+
+.. automodule:: neuralprocesses.torch.nn
+   :members:
+   :undoc-members:
+   :show-inheritance:

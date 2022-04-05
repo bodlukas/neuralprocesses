@@ -1,0 +1,7 @@
+neuralprocesses.chain module
+============================
+
+.. automodule:: neuralprocesses.chain
+   :members:
+   :undoc-members:
+   :show-inheritance:

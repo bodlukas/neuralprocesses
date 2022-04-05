@@ -1,0 +1,15 @@
+neuralprocesses.data package
+============================
+
+.. automodule:: neuralprocesses.data
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   neuralprocesses.data.data

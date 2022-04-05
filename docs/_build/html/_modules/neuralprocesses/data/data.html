@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neuralprocesses.data.data &mdash; neuralprocesses 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> neuralprocesses
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Neural Processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">Application Programming Interface</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">neuralprocesses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>neuralprocesses.data.data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for neuralprocesses.data.data</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">lab</span> <span class="k">as</span> <span class="nn">B</span>
+<span class="kn">import</span> <span class="nn">matrix</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">stheno</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GPGenerator&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="GPGenerator"><a class="viewcode-back" href="../../../source/neuralprocesses.data.data.html#neuralprocesses.data.data.GPGenerator">[docs]</a><span class="k">class</span> <span class="nc">GPGenerator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;GP generator.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dtype (dtype): Data type to generate.</span>
+<span class="sd">        kernel (:class:`stheno.Kernel`, optional): Kernel of the GP. Defaults to an</span>
+<span class="sd">            EQ kernel with length scale `0.25`.</span>
+<span class="sd">        noise (float, optional): Observation noise. Defaults to `5e-2`.</span>
+<span class="sd">        seed (int, optional): Seed. Defaults to `0`.</span>
+<span class="sd">        batch_size (int, optional): Batch size. Defaults to 16.</span>
+<span class="sd">        num_tasks (int, optional): Number of tasks to generate per epoch. Must be an</span>
+<span class="sd">            integer multiple of `batch_size`. Defaults to 2^14.</span>
+<span class="sd">        x_ranges (tuple[tuple[float, float]...], optional): Ranges of the inputs. Every</span>
+<span class="sd">            range corresponds to a dimension of the input, which means that the number</span>
+<span class="sd">            of ranges determine the dimensionality of the input. Defaults to</span>
+<span class="sd">            `((-2, 2),)`.</span>
+<span class="sd">        dim_y (int, optional): Dimensionality of the outputs. Defaults to `1`.</span>
+<span class="sd">        dim_y_latent (int, optional): If `y_dim &gt; 1`, this specifies the number of</span>
+<span class="sd">            latent processes. Defaults to `y_dim`.</span>
+<span class="sd">        num_context_points (int or tuple[int, int], optional): A fixed number of context</span>
+<span class="sd">            points or a lower and upper bound. Defaults to the range `(1, 50)`.</span>
+<span class="sd">        num_target_points (int or tuple[int, int], optional): A fixed number of target</span>
+<span class="sd">            points or a lower and upper bound. Defaults to the fixed number `50`.</span>
+<span class="sd">        pred_logpdf (bool, optional): Also compute the logpdf of the target set given</span>
+<span class="sd">            the context set under the true GP. Defaults to `True`.</span>
+<span class="sd">        pred_logpdf_diag (bool, optional): Also compute the logpdf of the target set</span>
+<span class="sd">            given the context set under the true diagonalised GP. Defaults to `True`.</span>
+<span class="sd">        device (str, optional): Device on which to generate data. Defaults to `cpu`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        dtype (dtype): Data type.</span>
+<span class="sd">        float64 (dtype): Floating point version of `dtype` with 64 bits.</span>
+<span class="sd">        int64 (dtype): Integer version of `dtype` with 64 bits.</span>
+<span class="sd">        kernel (:class:`stheno.Kernel`): Kernel of the GP.</span>
+<span class="sd">        noise (float): Observation noise.</span>
+<span class="sd">        batch_size (int): Batch size.</span>
+<span class="sd">        num_tasks (int): Number of tasks to generate per epoch. Is an integer multiple</span>
+<span class="sd">            of `batch_size`.</span>
+<span class="sd">        num_batches (int): Number batches in an epoch.</span>
+<span class="sd">        dim_x (int): Dimensionality of the inputs.</span>
+<span class="sd">        dim_y (int): Dimensionality of the outputs.</span>
+<span class="sd">        dim_y_latent (int): If `dim_y &gt; 1`, the number of latent processes.</span>
+<span class="sd">        h (int): If `dim_y &gt; 1`, the mixing points.</span>
+<span class="sd">        num_context_points (tuple[int, int]): Lower and upper bound of the number of</span>
+<span class="sd">            context points.</span>
+<span class="sd">        num_target_points (tuple[int, int]): Lower and upper bound of the number of</span>
+<span class="sd">            target points.</span>
+<span class="sd">        pred_logpdf (bool): Also compute the logpdf of the target set given the context</span>
+<span class="sd">            set under the true GP.</span>
+<span class="sd">        pred_logpdf_diag (bool): Also compute the logpdf of the target set given the</span>
+<span class="sd">            context set under the true diagonalised GP.</span>
+<span class="sd">        state (random state): Random state.</span>
+<span class="sd">        device (str): Device.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="p">,</span>
+        <span class="n">kernel</span><span class="o">=</span><span class="n">stheno</span><span class="o">.</span><span class="n">EQ</span><span class="p">()</span><span class="o">.</span><span class="n">stretch</span><span class="p">(</span><span class="mf">0.25</span><span class="p">),</span>
+        <span class="n">noise</span><span class="o">=</span><span class="mf">0.05</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+        <span class="n">num_tasks</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="mi">14</span><span class="p">,</span>
+        <span class="n">x_ranges</span><span class="o">=</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),),</span>
+        <span class="n">dim_y</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">dim_y_latent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">num_context_points</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span>
+        <span class="n">num_target_points</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="n">pred_logpdf</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">pred_logpdf_diag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span>
+        <span class="c1"># Derive the right floating and integral data types from `dtype`.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">float64</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">promote_dtypes</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">int64</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">dtype_int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">=</span> <span class="n">kernel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="n">noise</span>
+
+        <span class="c1"># The random state must be created on the right device.</span>
+        <span class="k">with</span> <span class="n">B</span><span class="o">.</span><span class="n">on_device</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">create_random_state</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">seed</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_tasks</span> <span class="o">=</span> <span class="n">num_tasks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_batches</span> <span class="o">=</span> <span class="n">num_tasks</span> <span class="o">//</span> <span class="n">batch_size</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_batches</span> <span class="o">*</span> <span class="n">batch_size</span> <span class="o">!=</span> <span class="n">num_tasks</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Number of tasks </span><span class="si">{</span><span class="n">num_tasks</span><span class="si">}</span><span class="s2"> must be a multiple of &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;the batch size </span><span class="si">{</span><span class="n">batch_size</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim_x</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_ranges</span><span class="p">)</span>
+        <span class="c1"># Contruct tensors for the bounds on the input range. These must be `float64`s.</span>
+        <span class="k">with</span> <span class="n">B</span><span class="o">.</span><span class="n">on_device</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">):</span>
+            <span class="n">lower</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">x_ranges</span><span class="p">))[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">upper</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">x_ranges</span><span class="p">))[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_ranges</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">to_active_device</span><span class="p">(</span><span class="n">lower</span><span class="p">),</span> <span class="n">B</span><span class="o">.</span><span class="n">to_active_device</span><span class="p">(</span><span class="n">upper</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim_y</span> <span class="o">=</span> <span class="n">dim_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim_y_latent</span> <span class="o">=</span> <span class="n">dim_y_latent</span> <span class="ow">or</span> <span class="n">dim_y</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim_y</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Draw a random mixing matrix.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dim_y</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dim_y_latent</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Ensure that `num_context_points` and `num_target_points` are tuples of lower</span>
+        <span class="c1"># bounds and upper bounds.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num_context_points</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">num_context_points</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_context_points</span><span class="p">,</span> <span class="n">num_context_points</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num_target_points</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">num_target_points</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_target_points</span><span class="p">,</span> <span class="n">num_target_points</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_context_points</span> <span class="o">=</span> <span class="n">num_context_points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_target_points</span> <span class="o">=</span> <span class="n">num_target_points</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pred_logpdf</span> <span class="o">=</span> <span class="n">pred_logpdf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pred_logpdf_diag</span> <span class="o">=</span> <span class="n">pred_logpdf_diag</span>
+
+<div class="viewcode-block" id="GPGenerator.generate_batch"><a class="viewcode-back" href="../../../source/neuralprocesses.data.data.html#neuralprocesses.data.data.GPGenerator.generate_batch">[docs]</a>    <span class="k">def</span> <span class="nf">generate_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generate a batch.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A task, which is a dictionary with keys &quot;xc&quot;, &quot;yc&quot;, &quot;xt&quot;, and &quot;yt&quot;.</span>
+<span class="sd">                Also possibly contains the keys &quot;pred_logpdf&quot; and &quot;pred_logpdf_diag&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">B</span><span class="o">.</span><span class="n">on_device</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">):</span>
+            <span class="n">batch</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="c1"># Sample number of context and target points.</span>
+            <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_context_points</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">num_context_points</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="n">upper</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="p">)</span>
+            <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_target_points</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">num_target_points</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="n">lower</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="n">upper</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Sample inputs.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">rand</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">num_context_points</span> <span class="o">+</span> <span class="n">num_target_points</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dim_x</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_ranges</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">lower</span> <span class="o">+</span> <span class="n">rand</span> <span class="o">*</span> <span class="p">(</span><span class="n">upper</span> <span class="o">-</span> <span class="n">lower</span><span class="p">)</span>
+
+            <span class="c1"># Construct prior. Cast `noise` before moving it to the active device,</span>
+            <span class="c1"># because Python scalars will not be interpreted as tensors and hence will</span>
+            <span class="c1"># not be moved to the GPU.</span>
+            <span class="n">noise</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">to_active_device</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise</span><span class="p">))</span>
+            <span class="c1"># If `self.y_dim &gt; 1`, then we create a multi-output GP. Otherwise, we</span>
+            <span class="c1"># use a simple regular GP.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim_y</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">stheno</span><span class="o">.</span><span class="n">GP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">stheno</span><span class="o">.</span><span class="n">Measure</span><span class="p">():</span>
+                    <span class="c1"># Construct latent processes and initialise output processes.</span>
+                    <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">stheno</span><span class="o">.</span><span class="n">GP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernel</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_y_latent</span><span class="p">)]</span>
+                    <span class="n">fs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_y</span><span class="p">)]</span>
+                    <span class="c1"># Perform matrix multiplication.</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_y</span><span class="p">):</span>
+                        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_y_latent</span><span class="p">):</span>
+                            <span class="n">fs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">xs</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                    <span class="c1"># Finally, construct the multi-output GP.</span>
+                    <span class="n">f</span> <span class="o">=</span> <span class="n">stheno</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="o">*</span><span class="n">fs</span><span class="p">)</span>
+
+            <span class="c1"># Sample context and target set.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">noise</span><span class="p">)</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+            <span class="c1"># Shuffle the dimensions to line up with the convention in the package.</span>
+            <span class="c1"># Afterwards, when computing logpdfs, we&#39;ll have to be careful to reshape</span>
+            <span class="c1"># things back. Moreover, we need to be super careful when extracting</span>
+            <span class="c1"># multiple outputs from the sample: reshape to `(self.y_dim, -1)` or to</span>
+            <span class="c1"># `(-1, self.y_dim)`?</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim_y</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">xc</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">num_context_points</span><span class="p">]</span>
+            <span class="n">yc</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">num_context_points</span><span class="p">]</span>
+            <span class="n">xt</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">num_context_points</span><span class="p">:]</span>
+            <span class="n">yt</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">num_context_points</span><span class="p">:]</span>
+
+            <span class="c1"># Compute predictive logpdfs.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_logpdf</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_logpdf_diag</span><span class="p">:</span>
+                <span class="c1"># Compute posterior and preditive distribution.</span>
+                <span class="n">obs</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">xc</span><span class="p">),</span> <span class="n">noise</span><span class="p">),</span> <span class="n">B</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">yc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">f_post</span> <span class="o">=</span> <span class="n">f</span> <span class="o">|</span> <span class="n">obs</span>
+                <span class="n">fdd</span> <span class="o">=</span> <span class="n">f_post</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">xt</span><span class="p">),</span> <span class="n">noise</span><span class="p">)</span>
+                <span class="c1"># Prepare `yt` for logpdf computation.</span>
+                <span class="n">yt_reshaped</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">yt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_logpdf</span><span class="p">:</span>
+                <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;pred_logpdf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdd</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">yt_reshaped</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pred_logpdf_diag</span><span class="p">:</span>
+                <span class="n">fdd_diag</span> <span class="o">=</span> <span class="n">stheno</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">fdd</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">matrix</span><span class="o">.</span><span class="n">Diagonal</span><span class="p">(</span><span class="n">fdd</span><span class="o">.</span><span class="n">var_diag</span><span class="p">))</span>
+                <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;pred_logpdf_diag&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdd_diag</span><span class="o">.</span><span class="n">logpdf</span><span class="p">(</span><span class="n">yt_reshaped</span><span class="p">)</span>
+
+            <span class="c1"># Convert to the data type and save.</span>
+            <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;xc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">xc</span><span class="p">)</span>
+            <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;yc&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">yc</span><span class="p">)</span>
+            <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;xt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">xt</span><span class="p">)</span>
+            <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;yt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">yt</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">batch</span></div>
+
+<div class="viewcode-block" id="GPGenerator.epoch"><a class="viewcode-back" href="../../../source/neuralprocesses.data.data.html#neuralprocesses.data.data.GPGenerator.epoch">[docs]</a>    <span class="k">def</span> <span class="nf">epoch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Construct a generator for an epoch.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            generator: Generator for an epoch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">lazy_gen_batch</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_batch</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">lazy_gen_batch</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_batches</span><span class="p">))</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Wessel Bruinsma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

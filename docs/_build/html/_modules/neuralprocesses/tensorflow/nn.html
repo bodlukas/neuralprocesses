@@ -1,0 +1,511 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neuralprocesses.tensorflow.nn &mdash; neuralprocesses 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> neuralprocesses
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Neural Processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">Application Programming Interface</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">neuralprocesses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../tensorflow.html">neuralprocesses.tensorflow</a> &raquo;</li>
+        
+      <li>neuralprocesses.tensorflow.nn</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for neuralprocesses.tensorflow.nn</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">lab.tensorflow</span> <span class="k">as</span> <span class="nn">B</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">plum</span> <span class="kn">import</span> <span class="n">convert</span>
+
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">_dispatch</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;num_params&quot;</span><span class="p">,</span> <span class="s2">&quot;Module&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="num_params"><a class="viewcode-back" href="../../../source/neuralprocesses.torch.nn.html#neuralprocesses.tensorflow.nn.num_params">[docs]</a><span class="nd">@_dispatch</span>
+<span class="k">def</span> <span class="nf">num_params</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the number of parameters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (:class:`tf.keras.Model`): Keras model.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: Number of parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">variables</span><span class="p">])</span></div>
+
+
+<span class="k">class</span> <span class="nc">ChannelsToFirst</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert from channels last format to channels first format.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">rank</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">perm</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">rank</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">rank</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">perm</span><span class="o">=</span><span class="n">perm</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ChannelsToLast</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert from channels first format to channels last format.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">rank</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">perm</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">rank</span><span class="p">))</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">perm</span><span class="o">=</span><span class="n">perm</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">ConvNd</span><span class="p">(</span>
+    <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">kernel</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">stride</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">dilation</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">groups</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">bias</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">transposed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">output_padding</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convolutional layer.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dim (int): Dimensionality.</span>
+<span class="sd">        in_channels (int): Number of input channels.</span>
+<span class="sd">        out_channels (int): Number of output channels.</span>
+<span class="sd">        kernel (int): Kernel size.</span>
+<span class="sd">        stride (int, optional): Stride.</span>
+<span class="sd">        dilation (int, optional): Dilation.</span>
+<span class="sd">        groups (int, optional): Number of groups.</span>
+<span class="sd">        bias (bool, optional): Use a bias. Defaults to `True`.</span>
+<span class="sd">        transposed (bool, optional): Transposed convolution. Defaults to `False`.</span>
+<span class="sd">        output_padding (int, optional): Output padding.</span>
+<span class="sd">        dtype (dtype, optional): Data type.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        object: Convolutional layer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Only set `data_format` on the GPU: there is no CPU support.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">list_physical_devices</span><span class="p">(</span><span class="s2">&quot;GPU&quot;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">data_format</span> <span class="o">=</span> <span class="s2">&quot;channels_first&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data_format</span> <span class="o">=</span> <span class="s2">&quot;channels_last&quot;</span>
+
+    <span class="c1"># Only set `output_padding` if it is given.</span>
+    <span class="n">additional_args</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">output_padding</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">additional_args</span><span class="p">[</span><span class="s2">&quot;output_padding&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output_padding</span>
+
+    <span class="c1"># Get the right layer kind.</span>
+    <span class="k">if</span> <span class="n">transposed</span><span class="p">:</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;Transpose&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="n">conv_layer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Conv</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">D</span><span class="si">{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)(</span>
+        <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,)</span> <span class="o">+</span> <span class="p">(</span><span class="kc">None</span><span class="p">,)</span> <span class="o">*</span> <span class="n">dim</span><span class="p">,</span>
+        <span class="n">filters</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+        <span class="n">kernel_size</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">stride</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
+        <span class="n">dilation_rate</span><span class="o">=</span><span class="n">dilation</span><span class="p">,</span>
+        <span class="n">groups</span><span class="o">=</span><span class="n">groups</span><span class="p">,</span>
+        <span class="n">use_bias</span><span class="o">=</span><span class="n">bias</span><span class="p">,</span>
+        <span class="n">data_format</span><span class="o">=</span><span class="n">data_format</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">additional_args</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">data_format</span> <span class="o">==</span> <span class="s2">&quot;channels_first&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">conv_layer</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">ChannelsToLast</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+                <span class="n">conv_layer</span><span class="p">,</span>
+                <span class="n">ChannelsToFirst</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">UpSamplingNd</span><span class="p">(</span>
+    <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">interp_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nearest&quot;</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Up-sampling layer.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dim (int): Dimensionality.</span>
+<span class="sd">        size (int, optional): Up-sampling factor. Defaults to `2`.</span>
+<span class="sd">        interp_method (str, optional): Interpolation method. Can be set to &quot;bilinear&quot;.</span>
+<span class="sd">            Defaults to &quot;nearest&#39;.</span>
+<span class="sd">        dtype (dtype): Data type.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        object: Up-sampling layer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Only set `data_format` on the GPU: there is no CPU support. Moreover,</span>
+    <span class="c1"># `UpSampling1D` does not accept the keyword argument `data_format`.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">list_physical_devices</span><span class="p">(</span><span class="s2">&quot;GPU&quot;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">dim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">data_format</span> <span class="o">=</span> <span class="s2">&quot;channels_first&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data_format</span> <span class="o">=</span> <span class="s2">&quot;channels_last&quot;</span>
+
+    <span class="c1"># Due to inconsistent input signatures between TensorFlow&#39;s `UpSamplingND`</span>
+    <span class="c1"># classes, we must construct keyword arguments dependent on the input dimension.</span>
+    <span class="n">additional_args</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">dim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># `UpSampling1D` does not accept the keyword `data_format` and requires data as</span>
+        <span class="c1"># channels last.</span>
+        <span class="n">additional_args</span><span class="p">[</span><span class="s2">&quot;data_format&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_format</span>
+    <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="c1"># Only `UpSampling2D` accepts the `interpolation` keyword argument; the 1D and</span>
+        <span class="c1"># 3D classes only supports nearest-neighbour interpolation.</span>
+        <span class="n">additional_args</span><span class="p">[</span><span class="s2">&quot;interpolation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interp_method</span>
+    <span class="k">elif</span> <span class="n">interp_method</span> <span class="o">!=</span> <span class="s2">&quot;nearest&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;With </span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s1">D inputs, only &quot;nearest&quot; is supported for `interp_method`.&#39;</span>
+        <span class="p">)</span>
+
+    <span class="n">upsample_layer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;UpSampling</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">D&quot;</span><span class="p">)(</span>
+        <span class="n">size</span><span class="o">=</span><span class="n">size</span> <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="p">(</span><span class="n">size</span><span class="p">,)</span> <span class="o">*</span> <span class="n">dim</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">additional_args</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">data_format</span> <span class="o">==</span> <span class="s2">&quot;channels_first&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">upsample_layer</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">ChannelsToLast</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+                <span class="n">upsample_layer</span><span class="p">,</span>
+                <span class="n">ChannelsToFirst</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">AvgPoolNd</span><span class="p">(</span>
+    <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">kernel</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">stride</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Average pooling layer.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dim (int): Dimensionality.</span>
+<span class="sd">        kernel (int): Kernel size.</span>
+<span class="sd">        stride (int, optional): Stride.</span>
+<span class="sd">        dtype (dtype): Data type.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        object: Average pooling layer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Only set `data_format` on the GPU: there is no CPU support.</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">list_physical_devices</span><span class="p">(</span><span class="s2">&quot;GPU&quot;</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">data_format</span> <span class="o">=</span> <span class="s2">&quot;channels_first&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data_format</span> <span class="o">=</span> <span class="s2">&quot;channels_last&quot;</span>
+
+    <span class="n">pool_layer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;AveragePooling</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">D&quot;</span><span class="p">)(</span>
+        <span class="n">pool_size</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span>
+        <span class="n">strides</span><span class="o">=</span><span class="n">stride</span><span class="p">,</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;valid&quot;</span><span class="p">,</span>
+        <span class="n">data_format</span><span class="o">=</span><span class="n">data_format</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">data_format</span> <span class="o">==</span> <span class="s2">&quot;channels_first&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pool_layer</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">ChannelsToLast</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+                <span class="n">pool_layer</span><span class="p">,</span>
+                <span class="n">ChannelsToFirst</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Interface</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;TensorFlow interface.&quot;&quot;&quot;</span>
+
+    <span class="n">ReLU</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">ReLU</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">modules</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Put modules in a sequence.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            *modules (object): Modules.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :class:`tf.keras.Sequential`: `modules` in sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">ModuleList</span><span class="p">(</span><span class="n">modules</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make a list of modules whose parameters are tracked.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            modules (list): List of modules.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: List of `modules` whose parameters are tracked.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TensorFlow tracks regular lists just fine.</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">modules</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">Linear</span><span class="p">(</span><span class="n">dim_in</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dim_out</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A linear layer.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dim_in (int): Input dimensionality.</span>
+<span class="sd">            dim_out (int): Output dimensionality.</span>
+<span class="sd">            dtype (dtype, optional): Data type.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :class:`tf.keras.Dense`: Linear layer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">dim_out</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">dim_in</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+
+    <span class="n">Conv1d</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">ConvNd</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Conv2d</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">ConvNd</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">Conv3d</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">ConvNd</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="n">UpSampling1d</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">UpSamplingNd</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">UpSampling2d</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">UpSamplingNd</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">UpSampling3d</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">UpSamplingNd</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="n">ConvTransposed1d</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">ConvNd</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">transposed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ConvTransposed2d</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">ConvNd</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">transposed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ConvTransposed3d</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">ConvNd</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">transposed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">AvgPool1d</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">AvgPoolNd</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">AvgPool2d</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">AvgPoolNd</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">AvgPool3d</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">AvgPoolNd</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">Parameter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A tracked parameter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (tensor): Initial value of the parameter.</span>
+<span class="sd">            dtype (dtype, optional): Data type.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :class:`tf.Variable`: Parameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span> <span class="ow">or</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="n">convert</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">B</span><span class="o">.</span><span class="n">TFDType</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+
+
+<span class="n">interface</span> <span class="o">=</span> <span class="n">Interface</span><span class="p">()</span>  <span class="c1">#: The TensorFlow interface.</span>
+
+
+<div class="viewcode-block" id="Module"><a class="viewcode-back" href="../../../source/neuralprocesses.tensorflow.nn.html#neuralprocesses.tensorflow.nn.Module">[docs]</a><span class="k">class</span> <span class="nc">Module</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A TensorFlow module.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nn</span> <span class="o">=</span> <span class="n">interface</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Wessel Bruinsma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

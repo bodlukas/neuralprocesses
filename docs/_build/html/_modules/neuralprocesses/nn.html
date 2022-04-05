@@ -1,0 +1,560 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neuralprocesses.nn &mdash; neuralprocesses 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> neuralprocesses
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Neural Processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Application Programming Interface</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">neuralprocesses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>neuralprocesses.nn</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for neuralprocesses.nn</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">lab</span> <span class="k">as</span> <span class="nn">B</span>
+<span class="kn">from</span> <span class="nn">plum</span> <span class="kn">import</span> <span class="n">Dispatcher</span>
+
+<span class="kn">from</span> <span class="nn">.parallel</span> <span class="kn">import</span> <span class="n">Parallel</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">register_module</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;MLP&quot;</span><span class="p">,</span> <span class="s2">&quot;UNet&quot;</span><span class="p">,</span> <span class="s2">&quot;ConvNet&quot;</span><span class="p">,</span> <span class="s2">&quot;Splitter&quot;</span><span class="p">]</span>
+
+
+<span class="n">_dispatch</span> <span class="o">=</span> <span class="n">Dispatcher</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="MLP"><a class="viewcode-back" href="../../source/neuralprocesses.nn.html#neuralprocesses.nn.MLP">[docs]</a><span class="nd">@register_module</span>
+<span class="k">class</span> <span class="nc">MLP</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;MLP.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        in_dim (int): Input dimensionality.</span>
+<span class="sd">        layers (tuple[int, ...]): Width of every hidden layer.</span>
+<span class="sd">        out_dim (int): Output dimensionality.</span>
+<span class="sd">        nonlinearity (function, optional): Nonlinearity.</span>
+<span class="sd">        dtype (dtype, optional): Data type.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        net (object): MLP, but which expects a different data format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">in_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">layers</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span>
+        <span class="n">out_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">nonlinearity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="c1"># Default to ReLUs.</span>
+        <span class="k">if</span> <span class="n">nonlinearity</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nonlinearity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+
+        <span class="c1"># Build layers.</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">layers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_dim</span><span class="p">,</span> <span class="n">out_dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">net</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_dim</span><span class="p">,</span> <span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">layers</span><span class="p">)):</span>
+                <span class="n">net</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nonlinearity</span><span class="p">)</span>
+                <span class="n">net</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">layers</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">layers</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+            <span class="n">net</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nonlinearity</span><span class="p">)</span>
+            <span class="n">net</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">out_dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">net</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">net</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">net</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span></div>
+
+
+<div class="viewcode-block" id="UNet"><a class="viewcode-back" href="../../source/neuralprocesses.nn.html#neuralprocesses.nn.UNet">[docs]</a><span class="nd">@register_module</span>
+<span class="k">class</span> <span class="nc">UNet</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;UNet.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dim (int): Dimensionality.</span>
+<span class="sd">        in_channels (int): Number of input channels.</span>
+<span class="sd">        out_channels (int): Number of output channels.</span>
+<span class="sd">        channels (tuple[int], optional): Channels of every layer of the UNet.</span>
+<span class="sd">            Defaults to six layers each with 64 channels.</span>
+<span class="sd">        unet_kernels (int or tuple[int], optional): Sizes of the kernels. Defaults to</span>
+<span class="sd">            `5`.</span>
+<span class="sd">        activations (object or tuple[object], optional): Activation functions.</span>
+<span class="sd">        resize_convs (bool, optional): Use resize convolutions rather than</span>
+<span class="sd">            transposed convolutions. Defaults to `False`.</span>
+<span class="sd">        resize_conv_interp_method (str, optional): Interpolation method for the</span>
+<span class="sd">            resize convolutions. Can be set to &quot;bilinear&quot;. Defaults to &quot;nearest&quot;.</span>
+<span class="sd">        dtype (dtype, optional): Data type.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        kernels (tuple[int]): Sizes of the kernels.</span>
+<span class="sd">        activations (tuple[function]): Activation functions.</span>
+<span class="sd">        num_halving_layers (int): Number of layers with striding equal to two.</span>
+<span class="sd">        receptive_fields (list[float]): Receptive field for every intermediate value.</span>
+<span class="sd">        receptive_field (float): Receptive field of the model.</span>
+<span class="sd">        before_turn_layers (list[module]): Layers before the U-turn.</span>
+<span class="sd">        after_turn_layers (list[module]): Layers after the U-turn</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">channels</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
+        <span class="n">kernels</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="n">activations</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">object</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">resize_convs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">resize_conv_interp_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;nearest&quot;</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="c1"># If `kernel` is an integer, repeat it for every layer.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kernels</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+            <span class="n">kernels</span> <span class="o">=</span> <span class="p">(</span><span class="n">kernels</span><span class="p">,)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">kernels</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Length of `kernels` (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">kernels</span><span class="p">)</span><span class="si">}</span><span class="s2">) must equal &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;the length of `channels` (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span><span class="si">}</span><span class="s2">).&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernels</span> <span class="o">=</span> <span class="n">kernels</span>
+
+        <span class="c1"># Default to ReLUs. Moreover, if `activations` is an activation function, repeat</span>
+        <span class="c1"># it for every layer.</span>
+        <span class="n">activations</span> <span class="o">=</span> <span class="n">activations</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">activations</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+            <span class="n">activations</span> <span class="o">=</span> <span class="p">(</span><span class="n">activations</span><span class="p">,)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">activations</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Length of `activations` (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">activations</span><span class="p">)</span><span class="si">}</span><span class="s2">) must equal &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;the length of `channels` (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span><span class="si">}</span><span class="s2">).&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activations</span> <span class="o">=</span> <span class="n">activations</span>
+
+        <span class="c1"># Compute number of halving layers.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_halving_layers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span>
+
+        <span class="c1"># Compute receptive field at all stages of the model.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">receptive_fields</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="c1"># Forward pass:</span>
+        <span class="k">for</span> <span class="n">kernel</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernels</span><span class="p">:</span>
+            <span class="n">after_conv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">receptive_fields</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">kernel</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">after_conv</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># If even, then subsample.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">receptive_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">after_conv</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># If odd, then average pool.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">receptive_fields</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">after_conv</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># Backward pass:</span>
+        <span class="k">for</span> <span class="n">kernel</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kernels</span><span class="p">):</span>
+            <span class="n">after_interp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">receptive_fields</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">receptive_fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">after_interp</span> <span class="o">+</span> <span class="p">(</span><span class="n">kernel</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">receptive_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">receptive_fields</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">Conv</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Conv</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">d&quot;</span><span class="p">)</span>
+        <span class="n">ConvTranspose</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;ConvTransposed</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">d&quot;</span><span class="p">)</span>
+        <span class="n">UpSampling</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;UpSampling</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">d&quot;</span><span class="p">)</span>
+        <span class="n">AvgPool</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;AvgPool</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">d&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Final linear layer:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_linear</span> <span class="o">=</span> <span class="n">Conv</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="o">=</span><span class="n">channels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+            <span class="n">kernel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Before turn layers:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">before_turn_layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">(</span>
+                    <span class="c1"># Perform average pooling if the previous receptive field is odd.</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                        <span class="n">Conv</span><span class="p">(</span>
+                            <span class="n">in_channels</span><span class="o">=</span><span class="p">((</span><span class="n">in_channels</span><span class="p">,)</span> <span class="o">+</span> <span class="n">channels</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span>
+                            <span class="n">out_channels</span><span class="o">=</span><span class="n">channels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                            <span class="n">kernel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                            <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                            <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+                        <span class="p">),</span>
+                        <span class="n">AvgPool</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">receptive_fields</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span>
+                    <span class="c1"># Perform subsampling if the previous receptive field is even.</span>
+                    <span class="k">else</span> <span class="n">Conv</span><span class="p">(</span>
+                        <span class="n">in_channels</span><span class="o">=</span><span class="p">((</span><span class="n">in_channels</span><span class="p">,)</span> <span class="o">+</span> <span class="n">channels</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span>
+                        <span class="n">out_channels</span><span class="o">=</span><span class="n">channels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                        <span class="n">kernel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                        <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">))</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># After turn layers:</span>
+
+        <span class="k">def</span> <span class="nf">get_num_in_channels</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># No skip connection yet.</span>
+                <span class="k">return</span> <span class="n">channels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Add the skip connection.</span>
+                <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">channels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">after_turn_layer</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">resize_convs</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+                    <span class="n">UpSampling</span><span class="p">(</span>
+                        <span class="n">interp_method</span><span class="o">=</span><span class="n">resize_conv_interp_method</span><span class="p">,</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">Conv</span><span class="p">(</span>
+                        <span class="n">in_channels</span><span class="o">=</span><span class="n">get_num_in_channels</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
+                        <span class="n">out_channels</span><span class="o">=</span><span class="p">((</span><span class="n">channels</span><span class="p">[</span><span class="mi">0</span><span class="p">],)</span> <span class="o">+</span> <span class="n">channels</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span>
+                        <span class="n">kernel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                        <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ConvTranspose</span><span class="p">(</span>
+                    <span class="n">in_channels</span><span class="o">=</span><span class="n">get_num_in_channels</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
+                    <span class="n">out_channels</span><span class="o">=</span><span class="p">((</span><span class="n">channels</span><span class="p">[</span><span class="mi">0</span><span class="p">],)</span> <span class="o">+</span> <span class="n">channels</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">kernel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernels</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="n">output_padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">after_turn_layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">after_turn_layer</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">))]</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">hs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">activations</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">before_turn_layers</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="n">x</span><span class="p">))]</span>
+        <span class="k">for</span> <span class="n">layer</span><span class="p">,</span> <span class="n">activation</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">before_turn_layers</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activations</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+        <span class="p">):</span>
+            <span class="n">hs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">activation</span><span class="p">(</span><span class="n">layer</span><span class="p">(</span><span class="n">hs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])))</span>
+
+        <span class="c1"># Now make the turn!</span>
+
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activations</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">after_turn_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">](</span><span class="n">hs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">h_prev</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">activation</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="nb">reversed</span><span class="p">(</span><span class="n">hs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">after_turn_layers</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">activations</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="p">):</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">activation</span><span class="p">(</span><span class="n">layer</span><span class="p">(</span><span class="n">B</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">h_prev</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_linear</span><span class="p">(</span><span class="n">h</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConvNet"><a class="viewcode-back" href="../../source/neuralprocesses.nn.html#neuralprocesses.nn.ConvNet">[docs]</a><span class="nd">@register_module</span>
+<span class="k">class</span> <span class="nc">ConvNet</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A depthwise-separable convolutional neural network.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        dim (int): Dimensionality.</span>
+<span class="sd">        in_channels (int): Number of input channels.</span>
+<span class="sd">        out_channels (int): Number of output channels.</span>
+<span class="sd">        channels (int): Number of channels at every intermediate layer.</span>
+<span class="sd">        num_layers (int): Number of layers.</span>
+<span class="sd">        points_per_unit (float): Density of the discretisation corresponding to the</span>
+<span class="sd">            inputs.</span>
+<span class="sd">        receptive_field (float): Desired receptive field.</span>
+<span class="sd">        dtype (dtype, optional): Data type.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        num_halving_layers (int): Number of layers with stride equal to two.</span>
+<span class="sd">        conv_net (module): The architecture.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">num_layers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">points_per_unit</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">receptive_field</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="n">activation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+
+        <span class="c1"># Make it a drop-in substitute for :class:`UNet`.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_halving_layers</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Compute kernel size.</span>
+        <span class="n">receptive_points</span> <span class="o">=</span> <span class="n">receptive_field</span> <span class="o">*</span> <span class="n">points_per_unit</span>
+        <span class="n">kernel</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">receptive_points</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">num_layers</span><span class="p">)</span>
+        <span class="n">kernel</span> <span class="o">=</span> <span class="n">kernel</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">kernel</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">kernel</span>  <span class="c1"># Make kernel size odd.</span>
+
+        <span class="n">Conv</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Conv</span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">d&quot;</span><span class="p">)</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Conv</span><span class="p">(</span>
+                <span class="n">in_channels</span><span class="o">=</span><span class="n">in_channels</span><span class="p">,</span>
+                <span class="n">out_channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span>
+                <span class="n">kernel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">activation</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_layers</span><span class="p">):</span>
+            <span class="n">layers</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">Conv</span><span class="p">(</span>
+                        <span class="n">in_channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span>
+                        <span class="n">out_channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span>
+                        <span class="n">kernel</span><span class="o">=</span><span class="n">kernel</span><span class="p">,</span>
+                        <span class="n">groups</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">Conv</span><span class="p">(</span>
+                        <span class="n">in_channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span>
+                        <span class="n">out_channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span>
+                        <span class="n">kernel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                        <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+                    <span class="p">),</span>
+                    <span class="n">activation</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Conv</span><span class="p">(</span>
+                <span class="n">in_channels</span><span class="o">=</span><span class="n">channels</span><span class="p">,</span>
+                <span class="n">out_channels</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+                <span class="n">kernel</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv_net</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">layers</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv_net</span><span class="p">(</span><span class="n">z</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Splitter"><a class="viewcode-back" href="../../source/neuralprocesses.nn.html#neuralprocesses.nn.Splitter">[docs]</a><span class="nd">@register_module</span>
+<span class="k">class</span> <span class="nc">Splitter</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Split a tensor into multiple tensors.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        *sizes (int): Size of every split</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        sizes (tuple[int]): Size of every split</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">sizes</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span> <span class="o">=</span> <span class="n">sizes</span>
+
+    <span class="nd">@_dispatch</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="n">B</span><span class="o">.</span><span class="n">Numeric</span><span class="p">):</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">splits</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">size</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizes</span><span class="p">:</span>
+            <span class="n">splits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">[:,</span> <span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">size</span><span class="p">,</span> <span class="p">:])</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="n">size</span>
+        <span class="k">return</span> <span class="n">Parallel</span><span class="p">(</span><span class="o">*</span><span class="n">splits</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Wessel Bruinsma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

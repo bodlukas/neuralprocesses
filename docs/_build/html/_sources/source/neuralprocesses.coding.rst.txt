@@ -1,0 +1,7 @@
+neuralprocesses.coding module
+=============================
+
+.. automodule:: neuralprocesses.coding
+   :members:
+   :undoc-members:
+   :show-inheritance:

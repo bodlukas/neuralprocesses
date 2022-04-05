@@ -1,0 +1,7 @@
+neuralprocesses.model module
+============================
+
+.. automodule:: neuralprocesses.model
+   :members:
+   :undoc-members:
+   :show-inheritance:

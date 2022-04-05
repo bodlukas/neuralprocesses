@@ -1,0 +1,7 @@
+neuralprocesses.architectures.lik module
+========================================
+
+.. automodule:: neuralprocesses.architectures.lik
+   :members:
+   :undoc-members:
+   :show-inheritance:

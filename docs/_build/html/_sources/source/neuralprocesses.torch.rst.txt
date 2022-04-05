@@ -1,0 +1,15 @@
+neuralprocesses.torch package
+=============================
+
+.. automodule:: neuralprocesses.torch
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   neuralprocesses.torch.nn

@@ -1,0 +1,7 @@
+neuralprocesses.dist module
+===========================
+
+.. automodule:: neuralprocesses.dist
+   :members:
+   :undoc-members:
+   :show-inheritance:

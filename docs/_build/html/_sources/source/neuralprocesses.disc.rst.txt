@@ -1,0 +1,7 @@
+neuralprocesses.disc module
+===========================
+
+.. automodule:: neuralprocesses.disc
+   :members:
+   :undoc-members:
+   :show-inheritance:

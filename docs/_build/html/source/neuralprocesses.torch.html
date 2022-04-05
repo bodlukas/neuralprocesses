@@ -1,0 +1,722 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>neuralprocesses.torch package &mdash; neuralprocesses 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="neuralprocesses.torch.nn module" href="neuralprocesses.torch.nn.html" />
+    <link rel="prev" title="neuralprocesses.tensorflow.nn module" href="neuralprocesses.tensorflow.nn.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> neuralprocesses
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Neural Processes</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">Application Programming Interface</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.architectures.html">neuralprocesses.architectures package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.architectures.convgnp.html">neuralprocesses.architectures.convgnp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.architectures.gnp.html">neuralprocesses.architectures.gnp module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.architectures.lik.html">neuralprocesses.architectures.lik module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.augment.html">neuralprocesses.augment module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.chain.html">neuralprocesses.chain module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.coder.html">neuralprocesses.coder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.coding.html">neuralprocesses.coding module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.data.html">neuralprocesses.data package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.data.data.html">neuralprocesses.data.data module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.disc.html">neuralprocesses.disc module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.dist.html">neuralprocesses.dist module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.likelihood.html">neuralprocesses.likelihood module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.model.html">neuralprocesses.model module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.nn.html">neuralprocesses.nn module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.parallel.html">neuralprocesses.parallel module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.setconv.html">neuralprocesses.setconv module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.tensorflow.html">neuralprocesses.tensorflow package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.tensorflow.nn.html">neuralprocesses.tensorflow.nn module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">neuralprocesses.torch package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="neuralprocesses.torch.nn.html">neuralprocesses.torch.nn module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.torch.nn.html">neuralprocesses.torch.nn module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="neuralprocesses.util.html">neuralprocesses.util module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">neuralprocesses</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../api.html">Application Programming Interface</a> &raquo;</li>
+        
+      <li>neuralprocesses.torch package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/source/neuralprocesses.torch.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-neuralprocesses.torch">
+<span id="neuralprocesses-torch-package"></span><h1>neuralprocesses.torch package<a class="headerlink" href="#module-neuralprocesses.torch" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Augment">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">Augment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Augment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.augment.html#neuralprocesses.augment.Augment" title="neuralprocesses.augment.Augment"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.augment.Augment</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Augment.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Augment.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Augment.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.Augment.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Chain">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">Chain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Chain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.chain.html#neuralprocesses.chain.Chain" title="neuralprocesses.chain.Chain"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.chain.Chain</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Chain.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Chain.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Chain.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.Chain.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.ConvNet">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">ConvNet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.ConvNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.nn.html#neuralprocesses.nn.ConvNet" title="neuralprocesses.nn.ConvNet"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.nn.ConvNet</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.ConvNet.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.ConvNet.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.ConvNet.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.ConvNet.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.DeepSet">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">DeepSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.DeepSet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.coder.html#neuralprocesses.coder.DeepSet" title="neuralprocesses.coder.DeepSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.coder.DeepSet</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.DeepSet.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.DeepSet.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.DeepSet.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.DeepSet.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Discretisation">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">Discretisation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Discretisation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.disc.html#neuralprocesses.disc.Discretisation" title="neuralprocesses.disc.Discretisation"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.disc.Discretisation</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Discretisation.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Discretisation.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Discretisation.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.Discretisation.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.DivideByFirstChannel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">DivideByFirstChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.DivideByFirstChannel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.setconv.html#neuralprocesses.setconv.DivideByFirstChannel" title="neuralprocesses.setconv.DivideByFirstChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.setconv.DivideByFirstChannel</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.DivideByFirstChannel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.DivideByFirstChannel.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.DivideByFirstChannel.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.DivideByFirstChannel.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.FunctionalCoder">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">FunctionalCoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.FunctionalCoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.coder.html#neuralprocesses.coder.FunctionalCoder" title="neuralprocesses.coder.FunctionalCoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.coder.FunctionalCoder</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.FunctionalCoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.FunctionalCoder.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.FunctionalCoder.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.FunctionalCoder.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.HeterogeneousGaussianLikelihood">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">HeterogeneousGaussianLikelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.HeterogeneousGaussianLikelihood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.likelihood.html#neuralprocesses.likelihood.HeterogeneousGaussianLikelihood" title="neuralprocesses.likelihood.HeterogeneousGaussianLikelihood"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.likelihood.HeterogeneousGaussianLikelihood</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.HeterogeneousGaussianLikelihood.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.HeterogeneousGaussianLikelihood.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.HeterogeneousGaussianLikelihood.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.HeterogeneousGaussianLikelihood.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.InputsCoder">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">InputsCoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.InputsCoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.coder.html#neuralprocesses.coder.InputsCoder" title="neuralprocesses.coder.InputsCoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.coder.InputsCoder</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.InputsCoder.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.InputsCoder.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.InputsCoder.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.InputsCoder.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.LowRankGaussianLikelihood">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">LowRankGaussianLikelihood</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.LowRankGaussianLikelihood" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.likelihood.html#neuralprocesses.likelihood.LowRankGaussianLikelihood" title="neuralprocesses.likelihood.LowRankGaussianLikelihood"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.likelihood.LowRankGaussianLikelihood</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.LowRankGaussianLikelihood.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.LowRankGaussianLikelihood.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.LowRankGaussianLikelihood.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.LowRankGaussianLikelihood.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.MLP">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">MLP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.MLP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.nn.html#neuralprocesses.nn.MLP" title="neuralprocesses.nn.MLP"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.nn.MLP</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.MLP.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.MLP.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.MLP.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.MLP.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Materialise">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">Materialise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Materialise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.coding.html#neuralprocesses.coding.Materialise" title="neuralprocesses.coding.Materialise"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.coding.Materialise</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Materialise.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Materialise.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Materialise.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.Materialise.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Model">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.model.html#neuralprocesses.model.Model" title="neuralprocesses.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.model.Model</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Model.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Model.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Model.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.Model.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Namespace">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">Namespace</span></span><a class="reference internal" href="../_modules/neuralprocesses/torch.html#Namespace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralprocesses.torch.Namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Parallel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">Parallel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Parallel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.parallel.html#neuralprocesses.parallel.Parallel" title="neuralprocesses.parallel.Parallel"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.parallel.Parallel</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Parallel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Parallel.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Parallel.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.Parallel.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.PrependDensityChannel">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">PrependDensityChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.PrependDensityChannel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.setconv.html#neuralprocesses.setconv.PrependDensityChannel" title="neuralprocesses.setconv.PrependDensityChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.setconv.PrependDensityChannel</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.PrependDensityChannel.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.PrependDensityChannel.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.PrependDensityChannel.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.PrependDensityChannel.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.SetConv">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">SetConv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.SetConv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.setconv.html#neuralprocesses.setconv.SetConv" title="neuralprocesses.setconv.SetConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.setconv.SetConv</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.SetConv.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.SetConv.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.SetConv.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.SetConv.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Splitter">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">Splitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Splitter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.nn.html#neuralprocesses.nn.Splitter" title="neuralprocesses.nn.Splitter"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.nn.Splitter</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Splitter.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.Splitter.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.Splitter.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.Splitter.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="neuralprocesses.torch.UNet">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">UNet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.UNet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="neuralprocesses.nn.html#neuralprocesses.nn.UNet" title="neuralprocesses.nn.UNet"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.nn.UNet</span></code></a>, <a class="reference internal" href="neuralprocesses.torch.nn.html#neuralprocesses.torch.nn.Module" title="neuralprocesses.torch.nn.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">neuralprocesses.torch.nn.Module</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="neuralprocesses.torch.UNet.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neuralprocesses.torch.UNet.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="neuralprocesses.torch.UNet.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="pre">:</span> <span class="pre">bool</span></em><a class="headerlink" href="#neuralprocesses.torch.UNet.training" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neuralprocesses.torch.create_forward">
+<span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">create_forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neuralprocesses/torch.html#create_forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralprocesses.torch.create_forward" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="neuralprocesses.torch.create_init">
+<span class="sig-prename descclassname"><span class="pre">neuralprocesses.torch.</span></span><span class="sig-name descname"><span class="pre">create_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/neuralprocesses/torch.html#create_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#neuralprocesses.torch.create_init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="neuralprocesses.torch.nn.html">neuralprocesses.torch.nn module</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="neuralprocesses.torch.nn.html" class="btn btn-neutral float-right" title="neuralprocesses.torch.nn module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="neuralprocesses.tensorflow.nn.html" class="btn btn-neutral float-left" title="neuralprocesses.tensorflow.nn module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2020, Wessel Bruinsma.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
