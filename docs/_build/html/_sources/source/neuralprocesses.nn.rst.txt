@@ -1,7 +1,0 @@
-neuralprocesses.nn module
-=========================
-
-.. automodule:: neuralprocesses.nn
-   :members:
-   :undoc-members:
-   :show-inheritance:

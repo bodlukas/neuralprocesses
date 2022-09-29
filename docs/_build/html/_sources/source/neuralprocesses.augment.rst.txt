@@ -1,7 +1,0 @@
-neuralprocesses.augment module
-==============================
-
-.. automodule:: neuralprocesses.augment
-   :members:
-   :undoc-members:
-   :show-inheritance:

@@ -1,7 +1,0 @@
-neuralprocesses.parallel module
-===============================
-
-.. automodule:: neuralprocesses.parallel
-   :members:
-   :undoc-members:
-   :show-inheritance:

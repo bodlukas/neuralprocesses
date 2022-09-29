@@ -1,7 +1,0 @@
-neuralprocesses.tensorflow.nn module
-====================================
-
-.. automodule:: neuralprocesses.tensorflow.nn
-   :members:
-   :undoc-members:
-   :show-inheritance:

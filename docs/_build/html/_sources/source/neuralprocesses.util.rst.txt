@@ -1,7 +1,0 @@
-neuralprocesses.util module
-===========================
-
-.. automodule:: neuralprocesses.util
-   :members:
-   :undoc-members:
-   :show-inheritance:

@@ -1,7 +1,0 @@
-neuralprocesses.architectures.gnp module
-========================================
-
-.. automodule:: neuralprocesses.architectures.gnp
-   :members:
-   :undoc-members:
-   :show-inheritance:

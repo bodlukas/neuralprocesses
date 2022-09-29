@@ -1,7 +1,0 @@
-neuralprocesses.architectures.convgnp module
-============================================
-
-.. automodule:: neuralprocesses.architectures.convgnp
-   :members:
-   :undoc-members:
-   :show-inheritance:

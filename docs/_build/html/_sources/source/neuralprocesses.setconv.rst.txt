@@ -1,7 +1,0 @@
-neuralprocesses.setconv module
-==============================
-
-.. automodule:: neuralprocesses.setconv
-   :members:
-   :undoc-members:
-   :show-inheritance:

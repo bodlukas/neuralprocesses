@@ -1,7 +1,0 @@
-neuralprocesses.likelihood module
-=================================
-
-.. automodule:: neuralprocesses.likelihood
-   :members:
-   :undoc-members:
-   :show-inheritance:
